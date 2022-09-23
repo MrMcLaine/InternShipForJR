@@ -61,4 +61,10 @@ public class PlayerServiceImpl implements PlayerService {
         return repository.findAll(pageRequest).toList();
 
     }
+
+    @Override
+    public List<Player> findAll1() {
+        return repository.findAll();
+
+    }
 }

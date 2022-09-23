@@ -18,15 +18,9 @@ public class PlayerController {
         this.service = service;
     }
 
-    @PostMapping
-    public void addPlayer(@RequestBody Player player) {
-
-        service.save(player);
-    }
-
-    @PutMapping
-    public void updatePlayer(@RequestBody Player player) {
-
+    @PostMapping("/{id}")
+    public void addPlayer(@RequestBody Player player, @PathVariable("id") Long id) {
+        player.setId(id);
         service.save(player);
     }
 
@@ -35,17 +29,29 @@ public class PlayerController {
         service.deleteById(id);
     }
 
-//    @GetMapping
-//    public Player findById(@Param("id") Long id) {
-//        return service.findById(id);
-//    }
+    @GetMapping("/{id}")
+    public Player findById(@PathVariable("id") Long id) {
+        return service.findById(id);
+    }
 
 
-    @GetMapping
+    @RequestMapping(method = RequestMethod.GET )
     public List<Player> findAll(@RequestParam("pageNumber") int pageNumber,
                                 @RequestParam("pageSize") int pageSize,
                                 @RequestParam("order") String  order) {
         return service.findAll(pageNumber, pageSize, order.toLowerCase());
     }
+
+    @RequestMapping(value ="/count",method = RequestMethod.GET )
+    public List<Player> findAll1(@RequestParam("pageNumber") int pageNumber,
+                                @RequestParam("pageSize") int pageSize,
+                                @RequestParam("order") String  order) {
+        return service.findAll(pageNumber, pageSize, order.toLowerCase());
+    }
+
+//    @RequestMapping(method = RequestMethod.GET )
+//    public List<Player> findAll1() {
+//        return service.findAll1();
+//    }
 
 }

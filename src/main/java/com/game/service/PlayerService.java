@@ -13,4 +13,5 @@ public interface PlayerService {
 
 
     List<Player> findAll(int pageNumber, int size, String order);
+    List<Player> findAll1();
 }
