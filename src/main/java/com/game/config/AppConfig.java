@@ -26,7 +26,7 @@ import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.
 @EnableTransactionManagement
 @ComponentScan("com.game")
 @EnableJpaRepositories(basePackages = "com.game.repository")
-@EnableWebMvc 
+@EnableWebMvc
 public class AppConfig {
 
     @Bean
@@ -35,7 +35,8 @@ public class AppConfig {
         em.setDataSource(dataSource());
         em.setPackagesToScan("com.game.entity");
 
-        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(false);
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
 
