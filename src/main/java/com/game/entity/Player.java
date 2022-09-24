@@ -5,10 +5,12 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "player")
+
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String title;
     @Enumerated(EnumType.STRING)
@@ -16,34 +18,33 @@ public class Player {
     @Enumerated(EnumType.STRING)
     private Profession profession;
     private Date birthday;
-    private boolean banned;
-    private int experience;
-    private int level;
-    private int untilNextLevel;
+    private Boolean banned;
+    private Integer experience;
+    private Integer level;
+    private Integer untilNextLevel;
 
-    public Player(long id, String name, String title, Race race,
-                  Profession profession, Date birthday, boolean banned,
-                  int experience, int level, int untilNextLevel) {
-        this.id = id;
-        this.name = name;
-        this.title = title;
-        this.race = race;
-        this.profession = profession;
-        this.birthday = birthday;
-        this.banned = banned;
-        this.experience = experience;
-        this.level = level;
-        this.untilNextLevel = untilNextLevel;
-    }
+//    public Player(Long id, String name, String title, Race race,
+//                  Profession profession, Date birthday, boolean banned,
+//                  int experience, int level, int untilNextLevel) {
+//        this.id = id;
+//        this.title = title;
+//        this.race = race;
+//        this.profession = profession;
+//        this.birthday = birthday;
+//        this.banned = banned;
+//        this.experience = experience;
+//        this.level = level;
+//        this.untilNextLevel = untilNextLevel;
+//    }
 
     public Player() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -87,35 +88,35 @@ public class Player {
         this.birthday = birthday;
     }
 
-    public boolean isBanned() {
+    public Boolean isBanned() {
         return banned;
     }
 
-    public void setBanned(boolean banned) {
+    public void setBanned(Boolean banned) {
         this.banned = banned;
     }
 
-    public int getExperience() {
+    public Integer getExperience() {
         return experience;
     }
 
-    public void setExperience(int experience) {
+    public void setExperience(Integer experience) {
         this.experience = experience;
     }
 
-    public int getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
-    public int getUntilNextLevel() {
+    public Integer getUntilNextLevel() {
         return untilNextLevel;
     }
 
-    public void setUntilNextLevel(int untilNextLevel) {
+    public void setUntilNextLevel(Integer untilNextLevel) {
         this.untilNextLevel = untilNextLevel;
     }
 }

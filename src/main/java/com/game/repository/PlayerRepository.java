@@ -6,13 +6,16 @@ import com.game.entity.Race;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 
-public interface PlayerRepository extends JpaRepository<Player, Long> {
-
+@Repository
+public interface PlayerRepository extends JpaRepository<Player, Long>, CrudRepository<Player, Long> {
+/*
 
     @Query("SELECT pl FROM Player pl " +
             "WHERE pl.name LIKE CONCAT('%', :name1, '%')" +
@@ -57,7 +60,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                                 @Param("maxExp") Integer maxExperience,
                                 @Param("minL") Integer minLevel,
                                 @Param("maxL") Integer maxLevel);
-       /* List<Player> findAllByNameContainingAndTitleContainingAndRaceAndProfessionAndBirthdayBetweenAndBannedAndExperienceBetweenAndLevelBetweenAndPageNumberAndPageSizeAndOrder(
+       *//* List<Player> findAllByNameContainingAndTitleContainingAndRaceAndProfessionAndBirthdayBetweenAndBannedAndExperienceBetweenAndLevelBetweenAndPageNumberAndPageSizeAndOrder(
                 String name,
                 String title,
                 Race race,

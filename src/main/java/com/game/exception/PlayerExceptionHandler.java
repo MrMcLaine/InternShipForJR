@@ -7,13 +7,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class PlayerExceptionHandler {
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(CustomExceptionBadRequest.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void sendIncorrectParams(IllegalArgumentException e) {
+    public void sendIncorrectParams(CustomExceptionBadRequest e) {
     }
 
-    @ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler(CustomExceptionNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void notFoundPlayer(NullPointerException e) {
+    public void notFoundPlayer(CustomExceptionNotFound e) {
     }
+
+
 }
