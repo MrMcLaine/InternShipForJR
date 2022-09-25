@@ -6,12 +6,8 @@ import com.game.entity.Profession;
 import com.game.entity.Race;
 import com.game.repository.PlayerRepository;
 import com.game.service.PlayerService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -164,55 +160,75 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void deleteById(long id) {
-        repository.deleteById(id);
-    }
-
-    @Override
     public Player findById(long id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElse(null);
     }
 
     @Override
-    public List<Player> findAll(int pageNumber, int size, String order) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, size, Sort.by(Sort.Order.by(order)));
-        return repository.findAll(pageRequest).toList();
-
+    public Long serviceForId(String id) {
+        if(id == null) {
+            return null;
+        } else
+        try {
+            return Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
-//    @Override
-//    public List<Player> findAllByParams(String name, String title, String race, String profession, Long after,
-//                                        Long before, Boolean banned, Integer minExperience,
-//                                        Integer maxExperience, Integer minLevel, Integer maxLevel) {
-//        Date dateAfter = new Date(after);
-//        Date dateBefore = new Date(before);
-//
-//        return repository.findAllByParams(
-//                name,
-//                title,
-//                Race.valueOf(race),
-//                Profession.valueOf(profession),
-//                dateAfter,
-//                dateBefore,
-//                banned,
-//                minExperience,
-//                maxExperience,
-//                minLevel,
-//                maxLevel);
-//    }
+    @Override
+    public Player updatePlayer(Player playerOut, Player playerIn) {
 
-//    @Override
-//    public List<Player> findAllByParamsPagination(String name, String title, String race, String profession,
-//                                                  Long after, Long before, Boolean banned, Integer minExperience,
-//                                                  Integer maxExperience, Integer minLevel, Integer maxLevel,
-//                                                  int pageNumber, int size, String order) {
-//        Date dateAfter = new Date(after);
-//        Date dateBefore = new Date(before);
-//
-//        Pageable pageable = PageRequest.of(pageNumber, size, Sort.by(Sort.Order.by(order)));
-//
-//        return repository.findAllByParamsPagination(name, title, Race.valueOf(race), Profession.valueOf(profession),
-//                dateAfter, dateBefore, banned, minExperience,
-//                maxExperience, minLevel, maxLevel, pageable);
-//    }
+        //name
+        if(nameIsValid(playerOut.getName())) {
+            playerIn.setName(playerOut.getName());
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        //title
+        if(titleIsValid(playerOut.getTitle())) {
+            playerIn.setTitle(playerOut.getTitle());
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        //race
+        if(raceIsValid(playerOut.getRace())) {
+            playerIn.setRace(playerOut.getRace());
+        }
+
+        //profession
+
+        if(professionIsValid(playerOut.getProfession())) {
+            playerIn.setProfession(playerOut.getProfession());
+        }
+
+        //birthday
+        if(birthdayIsValid(playerOut.getBirthday())) {
+            playerIn.setBirthday(playerOut.getBirthday());
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        //banned
+        if(playerOut.isBanned() != null) {
+            playerIn.setBanned(playerOut.isBanned());
+        }
+
+        //experience
+        if(experienceIsValid(playerOut.getExperience()) && playerOut.getExperience() != null) {
+            playerIn.setExperience(playerOut.getExperience());
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        return savePlayer(playerIn);
+    }
+
+    @Override
+    public void deletePlayerFromDB(Player player) {
+        repository.delete(player);
+    }
+
 }

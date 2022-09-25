@@ -3,16 +3,12 @@ package com.game.controller;
 import com.game.entity.Player;
 import com.game.entity.Profession;
 import com.game.entity.Race;
-import com.game.exception.CustomExceptionBadRequest;
 import com.game.service.PlayerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,7 +17,6 @@ import java.util.Objects;
 public class PlayerController {
 
     private final PlayerService service;
-
 
     public PlayerController(@Qualifier("playerServiceImpl") PlayerService service) {
         this.service = service;
@@ -67,7 +62,7 @@ public class PlayerController {
 
     // 2.Get players count
 
-    @RequestMapping(path ="rest/players/count", method = RequestMethod.GET)
+    @RequestMapping(path = "rest/players/count", method = RequestMethod.GET)
     public Integer findAllByParams(
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "title", required = false) String title,
@@ -93,13 +88,13 @@ public class PlayerController {
 //                minLevel,
 //                maxLevel);
         return service.getPlayers(name, title, race, profession, after, before, banned,
-                                  minExperience, maxExperience, minLevel, maxLevel).size();
+                minExperience, maxExperience, minLevel, maxLevel).size();
     }
 
     //3.Create player
 
-   @RequestMapping(path = "rest/players", method = RequestMethod.POST)
-   @ResponseBody
+    @RequestMapping(path = "rest/players", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseEntity<Player> addPlayer(@RequestBody Player player) {
 
         if (!service.isValid(player)) {
@@ -113,20 +108,54 @@ public class PlayerController {
         return new ResponseEntity<>(service.savePlayer(player), HttpStatus.OK);
     }
 
- /*   @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable("id") Long id) {
-        service.deleteById(id);
+    //4. Get player
+    @RequestMapping(path = "rest/players/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Player> findById(@PathVariable(value = "id") String pathId) {
+        Long id = service.serviceForId(pathId);
+
+        if (id == null || id <= 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Player player = service.findById(id);
+        if (Objects.isNull(player)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(player, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public Player findById(@PathVariable("id") Long id) {
-        Player player = service.findById(id);
 
-        if (Objects.isNull(player)) {
-            throw new NullPointerException();
+    // 5. Update player
+    @RequestMapping(path = "rest/players/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Player> updatePlayer(@PathVariable(value = "id") String pathId,
+                                               @RequestBody Player player) {
+        ResponseEntity<Player> entity = findById(pathId);
+        Player tempPlayer = entity.getBody();
+
+        if (tempPlayer == null) {
+            return entity;
         }
 
-        return player;
-    }*/
+        Player newPlayer;
+        try {
+            newPlayer = service.updatePlayer(player, tempPlayer);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(newPlayer, HttpStatus.OK);
+    }
+
+    //6. Delete player
+
+    @RequestMapping(path = "rest/players/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Player> deletePlayer(@PathVariable(value = "id") String pathId) {
+        ResponseEntity<Player> entity = findById(pathId);
+        Player tempPlayer = entity.getBody();
+        if (tempPlayer == null) {
+            return entity;
+        }
+        service.deletePlayerFromDB(tempPlayer);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

@@ -28,22 +28,13 @@ public interface PlayerService {
     boolean birthdayIsValid(Date birthday);
     boolean experienceIsValid(Integer experience);
 
-
-
-    void deleteById(long id);
-
     Player findById(long id);
 
+    Long serviceForId(String id);
 
-    List<Player> findAll(int pageNumber, int size, String order);
+    Player updatePlayer(Player playerIn, Player playerOut);
 
-//    public List<Player> findAllByParams(String name,
-//                                        String title, String race, String profession, Long after,
-//                                        Long before, Boolean banned, Integer minExperience,
-//                                        Integer maxExperience, Integer minLevel, Integer maxLevel);
-//    List<Player> findAllByParamsPagination(String name,
-//                                           String title, String race, String profession, Long after,
-//                                           Long before, Boolean banned, Integer minExperience,
-//                                           Integer maxExperience, Integer minLevel, Integer maxLevel,
-//                                           int pageNumber, int size, String order);
+
+    void deletePlayerFromDB(Player player);
+
 }
