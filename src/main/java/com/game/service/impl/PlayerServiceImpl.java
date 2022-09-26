@@ -7,14 +7,13 @@ import com.game.entity.Race;
 import com.game.repository.PlayerRepository;
 import com.game.service.PlayerService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
-@Transactional
 public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository repository;
 
@@ -40,7 +39,7 @@ public class PlayerServiceImpl implements PlayerService {
                     if (minExperience != null && player.getExperience().compareTo(minExperience) < 0) return;
                     if (maxExperience != null && player.getExperience().compareTo(maxExperience) > 0) return;
                     if (minLevel != null && player.getLevel().compareTo(minLevel) < 0) return;
-                    if (maxLevel != null && player.getLevel().compareTo(maxLevel) < 0) return;
+                    if (maxLevel != null && player.getLevel().compareTo(maxLevel) > 0) return;
 
                     tempList.add(player);
                 }
@@ -166,61 +165,70 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Long serviceForId(String id) {
-        if(id == null) {
+        if (id == null) {
             return null;
         } else
-        try {
-            return Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            return null;
-        }
+            try {
+                return Long.parseLong(id);
+            } catch (NumberFormatException e) {
+                return null;
+            }
     }
 
     @Override
     public Player updatePlayer(Player playerOut, Player playerIn) {
 
         //name
-        if(nameIsValid(playerOut.getName())) {
+        if (nameIsValid(playerOut.getName())) {
             playerIn.setName(playerOut.getName());
         } else {
-            throw new IllegalArgumentException();
+            if(playerOut.getName() != null) {
+                throw new IllegalArgumentException();
+            }
         }
 
         //title
-        if(titleIsValid(playerOut.getTitle())) {
+        if (titleIsValid(playerOut.getTitle())) {
             playerIn.setTitle(playerOut.getTitle());
         } else {
-            throw new IllegalArgumentException();
+            if (playerOut.getTitle() == null) {
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
 
         //race
-        if(raceIsValid(playerOut.getRace())) {
+        if (raceIsValid(playerOut.getRace())) {
             playerIn.setRace(playerOut.getRace());
         }
 
         //profession
 
-        if(professionIsValid(playerOut.getProfession())) {
+        if (professionIsValid(playerOut.getProfession())) {
             playerIn.setProfession(playerOut.getProfession());
         }
 
         //birthday
-        if(birthdayIsValid(playerOut.getBirthday())) {
-            playerIn.setBirthday(playerOut.getBirthday());
-        } else {
-            throw new IllegalArgumentException();
+        if (playerOut.getBirthday() != null) {
+            if (birthdayIsValid(playerOut.getBirthday())) {
+                playerIn.setBirthday(playerOut.getBirthday());
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
 
         //banned
-        if(playerOut.isBanned() != null) {
+        if (playerOut.isBanned() != null) {
             playerIn.setBanned(playerOut.isBanned());
         }
 
         //experience
-        if(experienceIsValid(playerOut.getExperience()) && playerOut.getExperience() != null) {
-            playerIn.setExperience(playerOut.getExperience());
-        } else {
-            throw new IllegalArgumentException();
+        if (playerOut.getExperience() != null) {
+            if (experienceIsValid(playerOut.getExperience())) {
+                playerIn.setExperience(playerOut.getExperience());
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
 
         return savePlayer(playerIn);

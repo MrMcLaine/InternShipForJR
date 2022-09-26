@@ -46,18 +46,6 @@ public class PlayerController {
         List<Player> sortedPlayersIn = service.sortPlayers(playersIn, order);
 
         return service.getPage(sortedPlayersIn, pageNumber, pageSize);
-//        return service.findAllByParamsPagination(
-//                name.toLowerCase(),
-//                title,
-//                race,
-//                profession,
-//                after,
-//                before,
-//                banned,
-//                minExperience,
-//                maxExperience,
-//                minLevel,
-//                maxLevel, pageNumber, pageSize, order);
     }
 
     // 2.Get players count
@@ -75,18 +63,6 @@ public class PlayerController {
             @RequestParam(value = "maxExperience", required = false) Integer maxExperience,
             @RequestParam(value = "minLevel", required = false) Integer minLevel,
             @RequestParam(value = "maxLevel", required = false) Integer maxLevel) {
-//        return service.findAllByParams(
-//                name.toLowerCase(),
-//                title,
-//                race,
-//                profession,
-//                after,
-//                before,
-//                banned,
-//                minExperience,
-//                maxExperience,
-//                minLevel,
-//                maxLevel);
         return service.getPlayers(name, title, race, profession, after, before, banned,
                 minExperience, maxExperience, minLevel, maxLevel).size();
     }
@@ -136,13 +112,13 @@ public class PlayerController {
             return entity;
         }
 
-        Player newPlayer;
-        try {
-            newPlayer = service.updatePlayer(player, tempPlayer);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(newPlayer, HttpStatus.OK);
+            Player newPlayer;
+            try {
+                newPlayer = service.updatePlayer(player, tempPlayer);
+            } catch (IllegalArgumentException e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(newPlayer, HttpStatus.OK);
     }
 
     //6. Delete player
