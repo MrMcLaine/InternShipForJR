@@ -4,7 +4,6 @@ import com.game.entity.Player;
 import com.game.entity.Profession;
 import com.game.entity.Race;
 import com.game.service.PlayerService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class PlayerController {
 
     private final PlayerService service;
 
-    public PlayerController(@Qualifier("playerServiceImpl") PlayerService service) {
+    public PlayerController(PlayerService service) {
         this.service = service;
     }
 
@@ -112,13 +111,13 @@ public class PlayerController {
             return entity;
         }
 
-            Player newPlayer;
-            try {
-                newPlayer = service.updatePlayer(player, tempPlayer);
-            } catch (IllegalArgumentException e) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity<>(newPlayer, HttpStatus.OK);
+        Player newPlayer;
+        try {
+            newPlayer = service.updatePlayer(player, tempPlayer);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(newPlayer, HttpStatus.OK);
     }
 
     //6. Delete player

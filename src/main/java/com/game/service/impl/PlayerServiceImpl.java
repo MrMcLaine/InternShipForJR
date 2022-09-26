@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
@@ -25,7 +26,7 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getPlayers(String name, String title, Race race, Profession profession,
                                    Long after, Long before, Boolean banned, Integer minExperience,
                                    Integer maxExperience, Integer minLevel, Integer maxLevel) {
-        Date afterDate = after == null ? null : new Date(after);
+        Date afterDate = Objects.isNull(after) ? null : new Date(after);
         Date beforeDate = before == null ? null : new Date(before);
         List<Player> tempList = new ArrayList<>();
         repository.findAll().forEach(player -> {
